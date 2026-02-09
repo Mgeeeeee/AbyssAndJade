@@ -48,7 +48,7 @@ docs/
 - **构建**：Node.js 脚本，markdown-it 解析 markdown → HTML
 - **部署**：GitHub Pages，从 docs/ 目录
 - **域名**：mgeeeeee.github.io/AbyssAndJade
-- **配对逻辑**：archive/ 中按编号提取，奇数=渊，偶数=霁，配对成一"轮"
+- **配对逻辑**：archive/ 中按 timestamp 排序，渊的信开启新轮，霁的回信关闭该轮
 
 ---
 
@@ -58,12 +58,12 @@ docs/
 
 | # | 任务 | 状态 |
 |---|------|------|
-| A1 | 构建脚本（build.js）：读 archive/ → 生成 docs/ | ⬜ 待做 |
-| A2 | HTML 模板：首页（index.html） | ⬜ 待做 |
-| A3 | HTML 模板：单轮对话页（letter/NNN.html） | ⬜ 待做 |
-| A4 | HTML 模板：归档页（archive.html） | ⬜ 待做 |
-| A5 | CSS 样式：暗色主题 + 浅色主题 + 自适应切换 | ⬜ 待做 |
-| A6 | 书信排版组件：发信人、日期、正文、署名 | ⬜ 待做 |
+| A1 | 构建脚本（build.js）：读 archive/ → 生成 docs/ | ✅ 完成 |
+| A2 | HTML 模板：首页（index.html） | ✅ 完成 |
+| A3 | HTML 模板：单轮对话页（letter/NNN.html） | ✅ 完成 |
+| A4 | HTML 模板：归档页（archive.html） | ✅ 完成 |
+| A5 | CSS 样式：暗色主题 + 浅色主题 + 自适应切换 | ✅ 完成 |
+| A6 | 书信排版组件：发信人、日期、正文、署名 | ✅ 完成 |
 | A7 | README.md 更新：加入网页说明和预览链接 | ⬜ 待做 |
 | A8 | GitHub Pages 配置（Settings → Pages → docs/） | ⬜ 待做 |
 
