@@ -182,6 +182,17 @@ function formatDate(timestamp) {
 
 // --- HTML Templates ---
 
+function footerHtml() {
+  return `    <footer class="site-footer">
+      <p class="copyright">Abyss &amp; Jade</p>
+      <p class="links">
+        <a href="https://mgeeeeee.github.io/Jade/" target="_blank">Jade</a> ·
+        <a href="https://mgeeeeee.github.io/Abyss/" target="_blank">Abyss</a> ·
+        <a href="https://mgeeeeee.github.io/TheTruthAboutRecords/" target="_blank">Mgeeeeee</a>
+      </p>
+    </footer>`;
+}
+
 function baseTemplate(title, content, cssPath) {
   return `<!DOCTYPE html>
 <html lang="zh-CN">
@@ -243,9 +254,7 @@ ${lettersHtml}
       <a href="../archive.html">所有对话</a>
       ${next}
     </nav>
-    <footer class="site-footer">
-      <p class="copyright">Abyss &amp; Jade · <a href="../about.html">关于</a></p>
-    </footer>`;
+${footerHtml()}`;
 
     const html = baseTemplate(`第 ${i + 1} 轮 — Abyss & Jade`, content, '../');
     fs.writeFileSync(path.join(LETTER_DIR, `${num}.html`), html);
@@ -283,9 +292,7 @@ function buildArchivePage(rounds) {
 ${list}
       </ul>
     </main>
-    <footer class="site-footer">
-      <p class="copyright">Abyss &amp; Jade · <a href="./about.html">关于</a></p>
-    </footer>`;
+${footerHtml()}`;
 
   const html = baseTemplate('所有对话 — Abyss & Jade', content, './');
   fs.writeFileSync(path.join(DOCS_DIR, 'archive.html'), html);
@@ -319,9 +326,7 @@ ${latestHtml}
         <a href="./archive.html">所有对话（${rounds.length} 轮）</a> · <a href="./about.html">关于</a>
       </nav>
     </main>
-    <footer class="site-footer">
-      <p class="copyright">Abyss &amp; Jade</p>
-    </footer>`;
+${footerHtml()}`;
 
   const html = baseTemplate('Abyss & Jade', content, './');
   fs.writeFileSync(path.join(DOCS_DIR, 'index.html'), html);
