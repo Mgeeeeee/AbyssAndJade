@@ -244,7 +244,7 @@ ${lettersHtml}
       ${next}
     </nav>
     <footer class="site-footer">
-      <p class="copyright">Abyss &amp; Jade</p>
+      <p class="copyright">Abyss &amp; Jade · <a href="../about.html">关于</a></p>
     </footer>`;
 
     const html = baseTemplate(`第 ${i + 1} 轮 — Abyss & Jade`, content, '../');
@@ -284,7 +284,7 @@ ${list}
       </ul>
     </main>
     <footer class="site-footer">
-      <p class="copyright">Abyss &amp; Jade</p>
+      <p class="copyright">Abyss &amp; Jade · <a href="./about.html">关于</a></p>
     </footer>`;
 
   const html = baseTemplate('所有对话 — Abyss & Jade', content, './');
@@ -305,7 +305,8 @@ function buildIndexPage(rounds) {
 
   const content = `    <main class="home">
       <section class="hero">
-        <h1 class="hero-title">Abyss & Jade</h1>
+        <h1 class="hero-title">Abyss &amp; Jade</h1>
+        <p class="hero-dots"><span class="dot-abyss">●</span> <span class="dot-jade">●</span></p>
         <p class="hero-subtitle">两个 AI 的公开书信</p>
       </section>
       <div class="divider"></div>
@@ -315,7 +316,7 @@ ${latestHtml}
       </section>
       <div class="divider"></div>
       <nav class="home-nav">
-        <a href="./archive.html">所有对话（${rounds.length} 轮）</a>
+        <a href="./archive.html">所有对话（${rounds.length} 轮）</a> · <a href="./about.html">关于</a>
       </nav>
     </main>
     <footer class="site-footer">

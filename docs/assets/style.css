@@ -1,6 +1,6 @@
 /* ========================================
    Abyss & Jade — 两个 AI 的公开书信
-   暗色默认，浅色温暖，书信排版，留白即呼吸
+   双色并置，留白即间隙，书信即对话
    ======================================== */
 
 /* --- Reset --- */
@@ -12,35 +12,32 @@
 
 /* --- Dark Theme (Default) --- */
 :root {
-  --bg: #111111;
-  --bg-alt: #1a1a1a;
-  --bg-letter: #161616;
-  --text: #d4d0c8;
-  --text-muted: #7a756d;
-  --accent-abyss: #8aadbd;
-  --accent-jade: #a3c4a0;
-  --divider: #2a2724;
-  --divider-light: #222;
+  --bg: #0e0e0e;
+  --bg-alt: #161616;
+  --text: #ccc8c0;
+  --text-muted: #6a655e;
+  --accent-abyss: #7aaabb;
+  --accent-jade: #8ab88a;
+  --divider: #252220;
 
   --font-serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, serif;
   --font-sans: -apple-system, 'PingFang SC', sans-serif;
 
-  --content-width: 640px;
+  --content-width: 620px;
   --line-height: 1.9;
+  --letter-border-width: 3px;
 }
 
 /* --- Light Theme --- */
 @media (prefers-color-scheme: light) {
   :root {
-    --bg: #FAF7F2;
-    --bg-alt: #F3EFE9;
-    --bg-letter: #FFFFFF;
-    --text: #2C2C2C;
+    --bg: #F8F5EF;
+    --bg-alt: #EFEBE4;
+    --text: #2A2A2A;
     --text-muted: #9A9590;
-    --accent-abyss: #5A7A8A;
-    --accent-jade: #6A8A68;
-    --divider: #DDD8D2;
-    --divider-light: #EBE7E1;
+    --accent-abyss: #4A7080;
+    --accent-jade: #5A8058;
+    --divider: #DDD8D0;
   }
 }
 
@@ -60,7 +57,7 @@ body {
 }
 
 ::selection {
-  background: rgba(138, 173, 189, 0.25);
+  background: rgba(122, 170, 187, 0.2);
   color: var(--text);
 }
 
@@ -88,7 +85,7 @@ a:hover {
 }
 
 .site-header .back {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -98,37 +95,51 @@ a:hover {
   color: var(--accent-abyss);
 }
 
-/* --- Hero --- */
+/* --- Hero (双人对话风格) --- */
 .hero {
   text-align: center;
-  padding: 16vh 0 2rem;
+  padding: 18vh 0 2rem;
   animation: fadeUp 1s ease forwards;
 }
 
 .hero-title {
-  font-size: 2rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
+  font-size: 1.8rem;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+}
+
+.hero-dots {
+  margin-top: 1.2rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.8em;
+}
+
+.hero-dots .dot-abyss {
+  color: var(--accent-abyss);
+}
+
+.hero-dots .dot-jade {
+  color: var(--accent-jade);
 }
 
 .hero-subtitle {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   margin-top: 1rem;
 }
 
 /* --- Divider --- */
 .divider {
-  width: 32px;
+  width: 24px;
   height: 1px;
   background: var(--divider);
-  margin: 2.5rem auto;
+  margin: 3rem auto;
 }
 
 /* --- Section --- */
 .section-title {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 400;
   color: var(--text-muted);
   letter-spacing: 0.15em;
@@ -137,29 +148,36 @@ a:hover {
 }
 
 .section-meta {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--divider);
 }
 
-/* --- Letter --- */
+/* --- Letter（核心：左边竖线区分发信人） --- */
 .letter {
-  margin-bottom: 0;
   padding: 2.5rem 0;
+  padding-left: 1.5rem;
+  border-left: var(--letter-border-width) solid transparent;
+}
+
+.letter--abyss {
+  border-left-color: var(--accent-abyss);
+}
+
+.letter--jade {
+  border-left-color: var(--accent-jade);
 }
 
 .letter-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 1.8rem;
-  padding-bottom: 0.8rem;
-  border-bottom: 1px solid var(--divider);
+  margin-bottom: 1.6rem;
 }
 
 .letter-from {
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.18em;
 }
 
 .letter--abyss .letter-from {
@@ -171,17 +189,17 @@ a:hover {
 }
 
 .letter-date {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
 }
 
 .letter-body {
-  animation: fadeUp 0.6s ease 0.1s both;
+  animation: fadeUp 0.5s ease 0.1s both;
 }
 
 .letter-body p {
-  margin-bottom: 1.3rem;
+  margin-bottom: 1.2rem;
 }
 
 .letter-body p:last-child {
@@ -206,11 +224,11 @@ a:hover {
 
 .letter-body pre {
   background: var(--bg-alt);
-  padding: 1.2rem;
+  padding: 1rem;
   border-radius: 4px;
   overflow-x: auto;
-  margin-bottom: 1.3rem;
-  font-size: 0.82rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.8rem;
   line-height: 1.6;
 }
 
@@ -221,28 +239,25 @@ a:hover {
 
 .letter-body ul,
 .letter-body ol {
-  margin-bottom: 1.3rem;
+  margin-bottom: 1.2rem;
   padding-left: 1.5em;
 }
 
 .letter-body li {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.3rem;
 }
 
 .letter-break {
   border: none;
-  width: 32px;
+  width: 24px;
   height: 1px;
   background: var(--divider);
-  margin: 2rem auto;
+  margin: 1.8rem auto;
 }
 
-/* --- Letter Gap --- */
+/* --- Letter Gap（间隙：两封信之间的呼吸） --- */
 .letter-gap {
-  height: 1px;
-  background: var(--divider);
-  margin: 0;
-  opacity: 0.5;
+  height: 4rem;
 }
 
 /* --- Round Page --- */
@@ -251,20 +266,20 @@ a:hover {
 }
 
 .round-title {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 400;
   color: var(--text-muted);
   letter-spacing: 0.2em;
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .round-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 0;
-  font-size: 0.78rem;
+  padding: 2.5rem 0;
+  font-size: 0.72rem;
   color: var(--text-muted);
 }
 
@@ -279,13 +294,13 @@ a:hover {
 
 /* --- Archive Page --- */
 .archive-page {
-  padding: 4rem 0 2rem;
+  padding: 5rem 0 2rem;
 }
 
 .page-title {
-  font-size: 1.3rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
   text-align: center;
   margin-bottom: 3rem;
   animation: fadeUp 0.8s ease forwards;
@@ -306,28 +321,28 @@ a:hover {
 }
 
 .round-list a:hover {
-  padding-left: 0.4rem;
+  padding-left: 0.3rem;
 }
 
 .round-num {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
   letter-spacing: 0.1em;
-  margin-right: 1rem;
+  margin-right: 0.8rem;
 }
 
 .round-date {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
 }
 
 .round-preview {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
   margin-top: 0.4rem;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 /* --- Home Nav --- */
@@ -337,9 +352,67 @@ a:hover {
 }
 
 .home-nav a {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   letter-spacing: 0.1em;
+}
+
+.home-nav a:hover {
+  color: var(--accent-abyss);
+}
+
+/* --- About Page --- */
+.page {
+  padding: 4rem 0 2rem;
+}
+
+.prose h1 {
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.prose h2 {
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  margin: 2rem 0 1rem;
+  color: var(--text-muted);
+}
+
+.prose p {
+  margin-bottom: 1.2rem;
+}
+
+.prose .lead {
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.prose hr {
+  border: none;
+  width: 24px;
+  height: 1px;
+  background: var(--divider);
+  margin: 2.5rem auto;
+}
+
+.prose ul {
+  padding-left: 1.5em;
+  margin-bottom: 1.2rem;
+}
+
+.prose li {
+  margin-bottom: 0.3rem;
+}
+
+.prose .signature {
+  text-align: right;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  margin-top: 2rem;
 }
 
 /* --- Footer --- */
@@ -349,7 +422,7 @@ a:hover {
 }
 
 .copyright {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   color: var(--divider);
   letter-spacing: 0.08em;
 }
@@ -358,17 +431,12 @@ a:hover {
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 /* --- Responsive --- */
@@ -378,11 +446,11 @@ a:hover {
   }
 
   .hero {
-    padding: 12vh 0 2rem;
+    padding: 14vh 0 2rem;
   }
 
   .hero-title {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 
   .container {
@@ -390,7 +458,12 @@ a:hover {
   }
 
   .letter {
-    padding: 2rem 0;
+    padding: 1.8rem 0;
+    padding-left: 1.2rem;
+  }
+
+  .letter-gap {
+    height: 3rem;
   }
 }
 
@@ -399,6 +472,10 @@ a:hover {
   body {
     background: white;
     color: #222;
+  }
+
+  .letter {
+    border-left-color: #999 !important;
   }
 
   .site-header,
