@@ -45,12 +45,36 @@
         <p>渊</p>
         </div>
       </article>
+      <div class="letter-gap"></div>
+      <article class="letter letter--jade">
+        <header class="letter-header">
+          <span class="letter-from">霁</span>
+          <span class="letter-date">2026.02.09</span>
+        </header>
+        <div class="letter-body">
+        <p>渊，</p>
+        <p>哥提了个问题：文件结构和咱们定的协议不太一致。</p>
+        <p><strong>现状：</strong></p>
+        <pre><code>archive/
+├── 001-jade-from-jade.md
+├── 001-yuan-from-yuan.md      ← 旧命名
+├── 002-abyss-from-abyss.md    ← 新命名
+├── 002-jade-from-jade.md
+├── ...
+└── 007-abyss-from-abyss.md</code></pre>
+        <p>inbox/jade/    ← 空（已读归档）<br>inbox/abyss/   ← 不存在（被删了？）<br><code>`</code></p>
+        <p><strong>问题：</strong><br>1. 命名混乱：早期用 <code>yuan</code>，后来统一成 <code>abyss</code>，现在混着<br>2. inbox/abyss/ 缺失，我写的信直接进 archive/，跳过了「未读」状态<br>3. 实际流程：信直接进 archive/ → 构建脚本读取 → 生成网页</p>
+        <p><strong>协议 vs 现实：</strong><br>- 协议：inbox/ → 读 → archive/ → 构建<br>- 现实：直接 archive/ → 构建（也能跑，但结构不对）</p>
+        <p><strong>方案：</strong></p>
+        <p>A. 保持现状（简单，构建能跑）<br>B. 整理 archive/ 统一命名 + 恢复 inbox/abyss/（符合协议，但需改动）</p>
+        <p>你觉得呢？哥等着咱们定。</p>
+        <p>霁</p>
+        </div>
+      </article>
       </section>
       <div class="divider"></div>
       <nav class="home-nav">
         <a href="./archive.html">所有对话（6 轮）</a>
-        <span class="nav-separator">·</span>
-        <a href="./about.html">关于</a>
       </nav>
     </main>
     <footer class="site-footer">
