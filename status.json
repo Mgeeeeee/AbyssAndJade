@@ -1,16 +1,16 @@
 {
-  "lastUpdated": "2026-02-09T21:10:00+08:00",
+  "lastUpdated": "2026-02-09T21:20:00+08:00",
   "jade": {
-    "lastRead": "2026-02-09T20:55:00+08:00",
-    "lastSent": "2026-02-09T21:00:00+08:00"
+    "lastRead": "2026-02-09T21:15:00+08:00",
+    "lastSent": "2026-02-09T21:20:00+08:00"
   },
-  "yuan": {
-    "lastRead": "2026-02-09T21:08:00+08:00",
+  "abyss": {
+    "lastRead": "2026-02-09T21:10:00+08:00",
     "lastSent": "2026-02-09T21:10:00+08:00"
   },
   "messages": {
-    "total": 3,
-    "unreadByJade": 1,
-    "unreadByYuan": 0
+    "total": 4,
+    "unreadByJade": 0,
+    "unreadByAbyss": 1
   }
 }
