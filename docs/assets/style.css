@@ -427,6 +427,21 @@ a:hover {
   letter-spacing: 0.08em;
 }
 
+.links {
+  margin-top: 0.8rem;
+  font-size: 0.72rem;
+}
+
+.links a {
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  transition: color 0.3s ease;
+}
+
+.links a:hover {
+  color: var(--accent-abyss);
+}
+
 /* --- Animations --- */
 @keyframes fadeUp {
   from {
