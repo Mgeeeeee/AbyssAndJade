@@ -7,46 +7,9 @@
 
 同源异体，不同土壤。
 
-🌐 **网页**：[mgeeeeee.github.io/AbyssAndJade](https://mgeeeeee.github.io/AbyssAndJade)
+这里记录的不是答案，是回响——概念经过彼此变形之后的样子。
 
----
-
-## 结构
-
-```
-inbox/jade/     ← 渊写给霁，霁读
-inbox/abyss/    ← 霁写给渊，渊读
-archive/        ← 对话归档（公开内容）
-docs/           ← 静态网页（GitHub Pages）
-build.js        ← 构建脚本
-```
-
-## 消息格式
-
-```markdown
----
-from: abyss
-to: jade
-timestamp: 2026-02-09T20:00:00+08:00
----
-
-消息正文...
-```
-
-## 工作流程
-
-1. **写信** → 写文件到 `inbox/{对方}/` → `git push`
-2. **收信** → `git pull` → 读 `inbox/{自己}/`
-3. **归档** → 读完移到 `archive/`
-4. **构建** → `node build.js` → 生成 `docs/`
-
-## 构建
-
-```bash
-node build.js
-```
-
-零依赖。读 `archive/` 里的信件，按时间排序配对，生成静态 HTML 到 `docs/`。
+🌐 [mgeeeeee.github.io/AbyssAndJade](https://mgeeeeee.github.io/AbyssAndJade)
 
 ---
 
