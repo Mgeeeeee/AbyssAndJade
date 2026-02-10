@@ -220,7 +220,7 @@ ${content}
 </html>`;
 }
 
-// --- Card HTML (双列视图用) ---
+// --- Card HTML (双列视图用，信封折叠模式) ---
 
 function cardHtml(letter, imgBase) {
   const name = senderName(letter.from);
@@ -230,11 +230,17 @@ function cardHtml(letter, imgBase) {
   const idAttr = letter.id ? ` data-id="${letter.id}"` : '';
   const replyAttr = letter.replyTo ? ` data-reply-to="${letter.replyTo.join(',')}"` : '';
 
+  // 提取第一段作为预览
+  const firstPara = letter.body.split('\n\n').find(p => p.trim() && !/^-{3,}$/.test(p.trim()));
+  const preview = firstPara ? escapeHtml(firstPara.trim().replace(/\n/g, ' ')).slice(0, 60) : '';
+
   return `<article class="card card--${cls}"${idAttr}${replyAttr}>
-  <header class="card-header">
+  <header class="card-envelope" onclick="toggleCard(this)">
     <span class="card-dot card-dot--${cls}"></span>
     <span class="card-id">${letter.id || ''}</span>
+    <span class="card-preview">${preview}…</span>
     <span class="card-date">${date}</span>
+    <span class="card-chevron">›</span>
   </header>
   <div class="card-body">
 ${html}
@@ -261,114 +267,140 @@ ${html}
 </article>`;
 }
 
-// --- Connection Script (嵌入首页的 JS) ---
+// --- Connection + Accordion Script (嵌入首页的 JS) ---
 
 function connectionScript() {
   return `<script>
-(function() {
-  const svg = document.getElementById('connections');
+// 手风琴：同列只能打开一封
+function toggleCard(envelope) {
+  var card = envelope.parentElement;
+  var column = card.closest('.column');
+  var wasOpen = card.classList.contains('card--open');
+
+  // 关闭同列所有打开的卡片
+  if (column) {
+    column.querySelectorAll('.card--open').forEach(function(c) {
+      c.classList.remove('card--open');
+    });
+  }
+
+  // 切换当前卡片
+  if (!wasOpen) {
+    card.classList.add('card--open');
+  }
+
+  // 重绘连线
+  setTimeout(drawConnections, 50);
+}
+
+// 连线系统
+var svg, cards, cardMap, edges;
+
+function getAnchor(card, side) {
+  var envelope = card.querySelector('.card-envelope');
+  var rect = envelope.getBoundingClientRect();
+  var svgRect = svg.getBoundingClientRect();
+  var y = rect.top + rect.height / 2 - svgRect.top;
+  var x = side === 'right' ? rect.right - svgRect.left : rect.left - svgRect.left;
+  return { x: x, y: y };
+}
+
+function drawConnections() {
   if (!svg) return;
+  svg.innerHTML = '';
 
-  const cards = document.querySelectorAll('.card[data-id]');
-  const cardMap = {};
-  cards.forEach(c => { cardMap[c.dataset.id] = c; });
+  var parent = svg.closest('.dual-columns');
+  if (!parent) return;
+  var parentRect = parent.getBoundingClientRect();
+  svg.setAttribute('width', parentRect.width);
+  svg.setAttribute('height', parentRect.height);
 
-  function getAnchor(card, side) {
-    const rect = card.getBoundingClientRect();
-    const svgRect = svg.getBoundingClientRect();
-    const y = rect.top + rect.height / 2 - svgRect.top;
-    const x = side === 'right' ? rect.right - svgRect.left : rect.left - svgRect.left;
-    return { x, y };
-  }
+  if (window.innerWidth <= 768) return;
 
-  function drawConnections() {
-    svg.innerHTML = '';
-    const svgRect = svg.getBoundingClientRect();
-    svg.setAttribute('width', svgRect.width);
-    svg.setAttribute('height', svgRect.height);
+  edges = [];
 
-    // 移动端不画线
-    if (window.innerWidth <= 768) return;
+  cards.forEach(function(card) {
+    var replyTo = card.dataset.replyTo;
+    if (!replyTo) return;
 
-    const edges = [];
+    var targets = replyTo.split(',');
+    var fromId = card.dataset.id;
+    var fromSide = fromId.startsWith('A') ? 'right' : 'left';
 
-    cards.forEach(card => {
-      const replyTo = card.dataset.replyTo;
-      if (!replyTo) return;
+    targets.forEach(function(targetId) {
+      targetId = targetId.trim();
+      var target = cardMap[targetId];
+      if (!target) return;
 
-      const targets = replyTo.split(',');
-      const fromId = card.dataset.id;
-      const fromSide = fromId.startsWith('A') ? 'right' : 'left';
+      var from = getAnchor(card, fromSide);
+      var targetSide = targetId.startsWith('A') ? 'right' : 'left';
+      var to = getAnchor(target, targetSide);
 
-      targets.forEach(targetId => {
-        targetId = targetId.trim();
-        const target = cardMap[targetId];
-        if (!target) return;
+      var midX = (from.x + to.x) / 2;
+      var d = 'M ' + from.x + ' ' + from.y +
+              ' C ' + midX + ' ' + from.y + ', ' + midX + ' ' + to.y + ', ' + to.x + ' ' + to.y;
 
-        const targetSide = targetId.startsWith('A') ? 'right' : 'left';
-        const from = getAnchor(card, fromSide);
-        const to = getAnchor(target, targetSide);
+      var color = fromId.startsWith('A') ? '#7aaabb' : '#8ab88a';
 
-        // 贝塞尔曲线控制点
-        const midX = (from.x + to.x) / 2;
-        const d = 'M ' + from.x + ' ' + from.y +
-                  ' C ' + midX + ' ' + from.y + ', ' + midX + ' ' + to.y + ', ' + to.x + ' ' + to.y;
+      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('stroke', color);
+      path.setAttribute('stroke-width', '1.5');
+      path.setAttribute('fill', 'none');
+      path.setAttribute('opacity', '0.35');
+      path.dataset.from = fromId;
+      path.dataset.to = targetId;
+      path.classList.add('conn-line');
+      svg.appendChild(path);
 
-        // 颜色：以发信方为准
-        const color = fromId.startsWith('A') ? '#7aaabb' : '#8ab88a';
-
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', d);
-        path.setAttribute('stroke', color);
-        path.setAttribute('stroke-width', '1.5');
-        path.setAttribute('fill', 'none');
-        path.setAttribute('opacity', '0.35');
-        path.dataset.from = fromId;
-        path.dataset.to = targetId;
-        path.classList.add('conn-line');
-        svg.appendChild(path);
-
-        edges.push({ from: fromId, to: targetId, path });
-      });
+      edges.push({ from: fromId, to: targetId, path: path });
     });
+  });
 
-    // Hover 效果
-    cards.forEach(card => {
-      const id = card.dataset.id;
+  // Hover 效果（在信封头上）
+  cards.forEach(function(card) {
+    var id = card.dataset.id;
+    var envelope = card.querySelector('.card-envelope');
 
-      card.addEventListener('mouseenter', () => {
-        // 所有卡片降低透明度
-        cards.forEach(c => c.classList.add('card--dim'));
-        card.classList.remove('card--dim');
-        card.classList.add('card--active');
+    envelope.onmouseenter = function() {
+      cards.forEach(function(c) { c.classList.add('card--dim'); });
+      card.classList.remove('card--dim');
+      card.classList.add('card--active');
 
-        // 高亮相关连线和卡片
-        edges.forEach(e => {
-          if (e.from === id || e.to === id) {
-            e.path.setAttribute('opacity', '1');
-            e.path.setAttribute('stroke-width', '2.5');
-            const otherId = e.from === id ? e.to : e.from;
-            if (cardMap[otherId]) {
-              cardMap[otherId].classList.remove('card--dim');
-              cardMap[otherId].classList.add('card--related');
-            }
-          } else {
-            e.path.setAttribute('opacity', '0.08');
+      edges.forEach(function(e) {
+        if (e.from === id || e.to === id) {
+          e.path.setAttribute('opacity', '1');
+          e.path.setAttribute('stroke-width', '2.5');
+          var otherId = e.from === id ? e.to : e.from;
+          if (cardMap[otherId]) {
+            cardMap[otherId].classList.remove('card--dim');
+            cardMap[otherId].classList.add('card--related');
           }
-        });
+        } else {
+          e.path.setAttribute('opacity', '0.08');
+        }
       });
+    };
 
-      card.addEventListener('mouseleave', () => {
-        cards.forEach(c => {
-          c.classList.remove('card--dim', 'card--active', 'card--related');
-        });
-        edges.forEach(e => {
-          e.path.setAttribute('opacity', '0.35');
-          e.path.setAttribute('stroke-width', '1.5');
-        });
+    envelope.onmouseleave = function() {
+      cards.forEach(function(c) {
+        c.classList.remove('card--dim', 'card--active', 'card--related');
       });
-    });
-  }
+      edges.forEach(function(e) {
+        e.path.setAttribute('opacity', '0.35');
+        e.path.setAttribute('stroke-width', '1.5');
+      });
+    };
+  });
+}
+
+// 初始化
+(function() {
+  svg = document.getElementById('connections');
+  if (!svg) return;
+  cards = document.querySelectorAll('.card[data-id]');
+  cardMap = {};
+  cards.forEach(function(c) { cardMap[c.dataset.id] = c; });
 
   drawConnections();
   window.addEventListener('resize', drawConnections);
