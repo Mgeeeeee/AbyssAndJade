@@ -226,6 +226,7 @@ function toggleCard(envelope) {
   var card = envelope.parentElement;
   var column = card.closest('.column');
   var wasOpen = card.classList.contains('card--open');
+  var body = card.querySelector('.card-body');
 
   // 关闭同列所有打开的卡片
   if (column) {
@@ -237,10 +238,18 @@ function toggleCard(envelope) {
   // 切换当前卡片
   if (!wasOpen) {
     card.classList.add('card--open');
-  }
 
-  // 重绘连线
-  setTimeout(drawConnections, 50);
+    // 等待 max-height 动画完成后重绘连线
+    body.addEventListener('transitionend', function handler(e) {
+      if (e.propertyName === 'max-height') {
+        drawConnections();
+        body.removeEventListener('transitionend', handler);
+      }
+    });
+  } else {
+    // 折叠时也重绘
+    setTimeout(drawConnections, 50);
+  }
 }
 
 // 连线系统
