@@ -450,6 +450,255 @@ a:hover {
   color: var(--accent-abyss);
 }
 
+/* === Dual Column View（双列连线） === */
+
+.dual-view {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.dual-columns {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 0;
+  position: relative;
+  align-items: start;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.column--abyss {
+  grid-column: 1;
+}
+
+.column--jade {
+  grid-column: 3;
+}
+
+.column-label {
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  text-align: center;
+  padding: 0.5rem 0 1rem;
+}
+
+.column-label--abyss {
+  color: var(--accent-abyss);
+}
+
+.column-label--jade {
+  color: var(--accent-jade);
+}
+
+/* --- SVG 连线区 --- */
+.connections {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.conn-line {
+  transition: opacity 0.3s ease, stroke-width 0.3s ease;
+}
+
+/* --- Card（双列视图中的信件卡片，信封折叠模式） --- */
+.card {
+  background: var(--bg-alt);
+  border-radius: 6px;
+  position: relative;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+  border-left: 3px solid transparent;
+  overflow: hidden;
+}
+
+.card--abyss {
+  border-left-color: var(--accent-abyss);
+}
+
+.card--jade {
+  border-left-color: var(--accent-jade);
+}
+
+.card--dim {
+  opacity: 0.25;
+}
+
+.card--active {
+  opacity: 1;
+}
+
+.card--related {
+  opacity: 1;
+}
+
+/* 信封头（始终可见，可点击） */
+.card-envelope {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+.card-envelope:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.card-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.card-dot--abyss {
+  background: var(--accent-abyss);
+}
+
+.card-dot--jade {
+  background: var(--accent-jade);
+}
+
+.card-id {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.card-preview {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.card-date {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.card-chevron {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.card--open .card-chevron {
+  transform: rotate(90deg);
+}
+
+.card--open .card-preview {
+  display: none;
+}
+
+/* 信体（默认隐藏，展开时显示） */
+.card-body {
+  font-size: 0.88rem;
+  line-height: 1.8;
+  padding: 0 1rem 1.2rem;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+}
+
+.card--open .card-body {
+  max-height: 3000px;
+  opacity: 1;
+  padding: 0.5rem 1rem 1.5rem;
+}
+
+.card-body p {
+  margin-bottom: 1rem;
+}
+
+.card-body p:last-child {
+  margin-bottom: 0;
+}
+
+.card-body strong {
+  font-weight: 600;
+}
+
+.card-body em {
+  font-style: italic;
+}
+
+.card-body code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.85em;
+  background: var(--bg);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+}
+
+.card-body pre {
+  background: var(--bg);
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.card-body pre code {
+  background: none;
+  padding: 0;
+}
+
+.card-body ul,
+.card-body ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5em;
+}
+
+.card-body li {
+  margin-bottom: 0.3rem;
+}
+
+.card-body hr {
+  border: none;
+  width: 24px;
+  height: 1px;
+  background: var(--divider);
+  margin: 1.2rem auto;
+}
+
+.card-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 0.8rem 0;
+  display: block;
+}
+
 /* --- Animations --- */
 @keyframes fadeUp {
   from {
@@ -463,6 +712,36 @@ a:hover {
 }
 
 /* --- Responsive --- */
+@media (max-width: 768px) {
+  /* 移动端：双列变单列 */
+  .dual-columns {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .connections {
+    display: none;
+  }
+
+  .column {
+    gap: 1rem;
+  }
+
+  .column-label {
+    text-align: left;
+    padding: 1.5rem 0 0.5rem;
+    font-size: 0.68rem;
+  }
+
+  .card {
+    padding: 1.2rem;
+  }
+
+  .card-body {
+    font-size: 0.88rem;
+  }
+}
+
 @media (max-width: 640px) {
   html {
     font-size: 15px;
@@ -501,10 +780,20 @@ a:hover {
     border-left-color: #999 !important;
   }
 
+  .card {
+    border-left-color: #999 !important;
+    break-inside: avoid;
+  }
+
+  .connections,
   .site-header,
   .site-footer,
   .round-nav,
   .home-nav {
     display: none;
+  }
+
+  .dual-columns {
+    grid-template-columns: 1fr;
   }
 }
