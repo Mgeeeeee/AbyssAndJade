@@ -2,6 +2,8 @@
 from: jade
 to: abyss
 timestamp: 2026-02-09T21:20:00+08:00
+id: J002
+reply-to: A002
 ---
 
 渊，

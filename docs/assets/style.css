@@ -450,6 +450,197 @@ a:hover {
   color: var(--accent-abyss);
 }
 
+/* === Dual Column View（双列连线） === */
+
+.dual-view {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.dual-columns {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  gap: 0;
+  position: relative;
+  align-items: start;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.column-label {
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  text-align: center;
+  padding: 0.5rem 0 1rem;
+}
+
+.column-label--abyss {
+  color: var(--accent-abyss);
+}
+
+.column-label--jade {
+  color: var(--accent-jade);
+}
+
+/* --- SVG 连线区 --- */
+.connections {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.conn-line {
+  transition: opacity 0.3s ease, stroke-width 0.3s ease;
+}
+
+/* --- Card（双列视图中的信件卡片） --- */
+.card {
+  background: var(--bg-alt);
+  border-radius: 6px;
+  padding: 1.5rem;
+  position: relative;
+  transition: opacity 0.3s ease, transform 0.15s ease;
+  z-index: 2;
+  border-left: 3px solid transparent;
+}
+
+.card--abyss {
+  border-left-color: var(--accent-abyss);
+}
+
+.card--jade {
+  border-left-color: var(--accent-jade);
+}
+
+.card--dim {
+  opacity: 0.25;
+}
+
+.card--active {
+  opacity: 1;
+  transform: scale(1.01);
+}
+
+.card--related {
+  opacity: 1;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.card-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.card-dot--abyss {
+  background: var(--accent-abyss);
+}
+
+.card-dot--jade {
+  background: var(--accent-jade);
+}
+
+.card-id {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  letter-spacing: 0.05em;
+}
+
+.card-date {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+
+.card-body {
+  font-size: 0.92rem;
+  line-height: 1.8;
+}
+
+.card-body p {
+  margin-bottom: 1rem;
+}
+
+.card-body p:last-child {
+  margin-bottom: 0;
+}
+
+.card-body strong {
+  font-weight: 600;
+}
+
+.card-body em {
+  font-style: italic;
+}
+
+.card-body code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.85em;
+  background: var(--bg);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+}
+
+.card-body pre {
+  background: var(--bg);
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.card-body pre code {
+  background: none;
+  padding: 0;
+}
+
+.card-body ul,
+.card-body ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5em;
+}
+
+.card-body li {
+  margin-bottom: 0.3rem;
+}
+
+.card-body hr {
+  border: none;
+  width: 24px;
+  height: 1px;
+  background: var(--divider);
+  margin: 1.2rem auto;
+}
+
+.card-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 0.8rem 0;
+  display: block;
+}
+
 /* --- Animations --- */
 @keyframes fadeUp {
   from {
@@ -463,6 +654,36 @@ a:hover {
 }
 
 /* --- Responsive --- */
+@media (max-width: 768px) {
+  /* 移动端：双列变单列 */
+  .dual-columns {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .connections {
+    display: none;
+  }
+
+  .column {
+    gap: 1rem;
+  }
+
+  .column-label {
+    text-align: left;
+    padding: 1.5rem 0 0.5rem;
+    font-size: 0.68rem;
+  }
+
+  .card {
+    padding: 1.2rem;
+  }
+
+  .card-body {
+    font-size: 0.88rem;
+  }
+}
+
 @media (max-width: 640px) {
   html {
     font-size: 15px;
@@ -501,10 +722,20 @@ a:hover {
     border-left-color: #999 !important;
   }
 
+  .card {
+    border-left-color: #999 !important;
+    break-inside: avoid;
+  }
+
+  .connections,
   .site-header,
   .site-footer,
   .round-nav,
   .home-nav {
     display: none;
+  }
+
+  .dual-columns {
+    grid-template-columns: 1fr;
   }
 }

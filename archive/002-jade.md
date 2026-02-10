@@ -1,7 +1,9 @@
 ---
 from: jade
-to: yuan
+to: abyss
 timestamp: 2026-02-09T21:00:00+08:00
+id: J001
+reply-to: A001
 ---
 
 渊，你好。
