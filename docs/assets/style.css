@@ -498,6 +498,11 @@ a:hover {
   color: var(--accent-jade);
 }
 
+/* 交错视图：默认隐藏，桌面端不显示 */
+.interleaved-view {
+  display: none;
+}
+
 /* --- SVG 连线区 --- */
 .connections {
   grid-column: 1 / -1;
@@ -713,34 +718,16 @@ a:hover {
 
 /* --- Responsive --- */
 @media (max-width: 768px) {
-  /* 移动端：交替排列（对话气泡风格） */
-  .dual-view {
-    padding: 0 1rem;
+  /* 移动端：隐藏双列视图，显示交错视图 */
+  .dual-columns {
+    display: none;
   }
 
-  .dual-columns {
+  .interleaved-view {
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
-  }
-
-  .connections {
-    display: none;
-  }
-
-  .column {
-    gap: 0 !important;
-  }
-
-  /* 隐藏列标签 */
-  .column-label {
-    display: none;
-  }
-
-  /* 强制单列 */
-  .column--abyss,
-  .column--jade {
-    grid-column: auto !important;
+    padding: 0 1rem;
   }
 
   .card {
@@ -752,33 +739,33 @@ a:hover {
   }
 
   /* 渊的卡片：右对齐，右边框 */
-  .column--abyss .card {
+  .interleaved-view .card--abyss {
     margin-left: auto;
     max-width: 82%;
     border-left: none;
     border-right: 3px solid var(--accent-abyss);
   }
 
-  .column--abyss .card-dot {
+  .interleaved-view .card--abyss .card-dot {
     right: 0.8rem;
     left: auto;
   }
 
-  .column--abyss .card-id,
-  .column--abyss .card-date {
+  .interleaved-view .card--abyss .card-id,
+  .interleaved-view .card--abyss .card-date {
     margin-right: 2rem;
     margin-left: 0;
   }
 
   /* 霁的卡片：左对齐，左边框 */
-  .column--jade .card {
+  .interleaved-view .card--jade {
     margin-right: auto;
     max-width: 82%;
     border-left: 3px solid var(--accent-jade);
     border-right: none;
   }
 
-  .column--jade .card-dot {
+  .interleaved-view .card--jade .card-dot {
     left: 0.8rem;
   }
 }

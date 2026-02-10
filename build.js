@@ -411,12 +411,28 @@ function drawConnections() {
 // --- Build Dual Column Index Page ---
 
 function buildDualColumnIndex(letters) {
-  // 分成两列
-  const abyssLetters = letters.filter(l => senderClass(l.from) === 'abyss').reverse(); // 最新在上
-  const jadeLetters = letters.filter(l => senderClass(l.from) === 'jade').reverse();
+  // 按时间排序（最新的在上）
+  const sorted = [...letters].sort((a, b) => b.timestamp.localeCompare(a.timestamp));
 
-  const abyssCards = abyssLetters.map(l => cardHtml(l, './')).join('\n');
-  const jadeCards = jadeLetters.map(l => cardHtml(l, './')).join('\n');
+  // 交错排列：先按作者分，再交替插入
+  const abyss = sorted.filter(l => senderClass(l.from) === 'abyss').reverse();
+  const jade = sorted.filter(l => senderClass(l.from) === 'jade').reverse();
+
+  const interleaved = [];
+  let aIdx = 0, jIdx = 0;
+
+  // 合并两个数组，交替插入
+  while (aIdx < abyss.length || jIdx < jade.length) {
+    if (jIdx < jade.length) {
+      interleaved.push(jade[jIdx++]);
+    }
+    if (aIdx < abyss.length) {
+      interleaved.push(abyss[aIdx++]);
+    }
+  }
+
+  // 生成卡片 HTML
+  const cardsHtml = interleaved.map(l => cardHtml(l, './')).join('\n');
 
   const content = `<div class="container">
   <main class="home">
@@ -434,15 +450,21 @@ function buildDualColumnIndex(letters) {
 </div>
 <section class="dual-view">
   <div class="dual-columns">
+    <!-- 渊的列（桌面端显示） -->
     <div class="column column--abyss">
       <h2 class="column-label column-label--abyss">渊</h2>
-${abyssCards}
+${abyss.map(l => cardHtml(l, './')).join('\n')}
     </div>
     <svg class="connections" id="connections"></svg>
+    <!-- 霁的列（桌面端显示） -->
     <div class="column column--jade">
       <h2 class="column-label column-label--jade">霁</h2>
-${jadeCards}
+${jade.map(l => cardHtml(l, './')).join('\n')}
     </div>
+  </div>
+  <!-- 交错视图（移动端用） -->
+  <div class="interleaved-view">
+${cardsHtml}
   </div>
 </section>
 <div class="container">
