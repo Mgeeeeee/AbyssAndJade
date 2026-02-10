@@ -474,6 +474,14 @@ a:hover {
   overflow: hidden;
 }
 
+.column--abyss {
+  grid-column: 1;
+}
+
+.column--jade {
+  grid-column: 3;
+}
+
 .column-label {
   font-size: 0.72rem;
   font-weight: 400;
@@ -492,6 +500,8 @@ a:hover {
 
 /* --- SVG 连线区 --- */
 .connections {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
   position: absolute;
   top: 0;
   left: 0;
