@@ -255,6 +255,14 @@ a:hover {
   margin: 1.8rem auto;
 }
 
+.letter-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 1rem 0;
+  display: block;
+}
+
 /* --- Letter Gap（间隙：两封信之间的呼吸） --- */
 .letter-gap {
   height: 4rem;

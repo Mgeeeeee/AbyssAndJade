@@ -36,7 +36,7 @@ function parseFrontMatter(raw) {
 
 // --- Markdown → HTML ---
 
-function mdToHtml(body) {
+function mdToHtml(body, imgBase) {
   const blocks = body.split(/\n\n+/);
   return blocks.map(block => {
     const trimmed = block.trim();
@@ -52,7 +52,7 @@ function mdToHtml(body) {
         .filter(l => l.trim())
         .map(l => {
           const text = l.replace(/^\d+\.\s*/, '');
-          return `          <li>${inlineFormat(escapeHtml(text))}</li>`;
+          return `          <li>${inlineFormat(escapeHtml(text), imgBase)}</li>`;
         });
       return `        <ol>\n${items.join('\n')}\n        </ol>`;
     }
@@ -62,7 +62,7 @@ function mdToHtml(body) {
         .filter(l => l.trim())
         .map(l => {
           const text = l.replace(/^-\s*/, '');
-          return `          <li>${inlineFormat(escapeHtml(text))}</li>`;
+          return `          <li>${inlineFormat(escapeHtml(text), imgBase)}</li>`;
         });
       return `        <ul>\n${items.join('\n')}\n        </ul>`;
     }
@@ -74,12 +74,17 @@ function mdToHtml(body) {
     }
 
     // 普通段落
-    const lines = trimmed.split('\n').map(l => inlineFormat(escapeHtml(l))).join('<br>');
+    const lines = trimmed.split('\n').map(l => inlineFormat(escapeHtml(l), imgBase)).join('<br>');
     return `        <p>${lines}</p>`;
   }).join('\n');
 }
 
-function inlineFormat(str) {
+function inlineFormat(str, imgBase) {
+  // ![alt](src) 图片
+  str = str.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, src) => {
+    const imgSrc = src.startsWith('http') ? src : `${imgBase || '../'}images/${src}`;
+    return `<img src="${imgSrc}" alt="${alt}" class="letter-image" loading="lazy">`;
+  });
   // **粗体**
   str = str.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   // *斜体*
@@ -114,7 +119,6 @@ function readLetters() {
       to: meta.to || 'unknown',
       timestamp: meta.timestamp || '',
       body,
-      html: mdToHtml(body),
     });
   }
 
@@ -210,10 +214,11 @@ ${content}
 </html>`;
 }
 
-function letterHtml(letter) {
+function letterHtml(letter, imgBase) {
   const name = senderName(letter.from);
   const cls = senderClass(letter.from);
   const date = formatDate(letter.timestamp);
+  const html = mdToHtml(letter.body, imgBase);
 
   return `      <article class="letter letter--${cls}">
         <header class="letter-header">
@@ -221,7 +226,7 @@ function letterHtml(letter) {
           <span class="letter-date">${date}</span>
         </header>
         <div class="letter-body">
-${letter.html}
+${html}
         </div>
       </article>`;
 }
@@ -236,7 +241,7 @@ function buildLetterPages(rounds) {
     const num = String(i + 1).padStart(3, '0');
     const allLetters = [...round.abyssLetters, ...round.jadeLetters];
 
-    const lettersHtml = allLetters.map(l => letterHtml(l)).join('\n      <div class="letter-gap"></div>\n');
+    const lettersHtml = allLetters.map(l => letterHtml(l, '../')).join('\n      <div class="letter-gap"></div>\n');
 
     // 导航
     const prev = i > 0 ? `<a href="./${String(i).padStart(3, '0')}.html">&larr; 上一轮</a>` : '<span></span>';
@@ -307,7 +312,7 @@ function buildIndexPage(rounds) {
 
   if (latest) {
     const allLetters = [...latest.abyssLetters, ...latest.jadeLetters];
-    latestHtml = allLetters.map(l => letterHtml(l)).join('\n      <div class="letter-gap"></div>\n');
+    latestHtml = allLetters.map(l => letterHtml(l, './')).join('\n      <div class="letter-gap"></div>\n');
   }
 
   const content = `    <main class="home">
@@ -333,6 +338,25 @@ ${footerHtml()}`;
   console.log('  ✓ index.html');
 }
 
+// --- Copy Images ---
+
+function copyImages() {
+  const IMAGES_DIR = path.join(DOCS_DIR, 'images');
+  fs.mkdirSync(IMAGES_DIR, { recursive: true });
+
+  const imageExts = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'];
+  const files = fs.readdirSync(ARCHIVE_DIR).filter(f =>
+    imageExts.includes(path.extname(f).toLowerCase())
+  );
+
+  for (const file of files) {
+    fs.copyFileSync(path.join(ARCHIVE_DIR, file), path.join(IMAGES_DIR, file));
+    console.log(`  ✓ images/${file}`);
+  }
+
+  return files.length;
+}
+
 // --- Main ---
 
 console.log('\n📬 Building Abyss & Jade...\n');
@@ -345,8 +369,9 @@ console.log(`  Found ${letters.length} letter(s) in archive/`);
 const rounds = groupIntoRounds(letters);
 console.log(`  Grouped into ${rounds.length} round(s)\n`);
 
+const imgCount = copyImages();
 const count = buildLetterPages(rounds);
 buildArchivePage(rounds);
 buildIndexPage(rounds);
 
-console.log(`\n✅ Done. ${count} round(s), ${letters.length} letter(s) built.\n`);
+console.log(`\n✅ Done. ${count} round(s), ${letters.length} letter(s), ${imgCount} image(s) built.\n`);
