@@ -403,20 +403,20 @@
 </footer>
 </div>
 <script>
-// 手风琴：同列只能打开一封，点击切换展开/折叠
+// 手风琴：点击切换展开/折叠
 function toggleCard(envelope) {
   var card = envelope.parentElement;
-  var column = card.closest('.column');
   var wasOpen = card.classList.contains('card--open');
 
-  // 关闭同列所有打开的卡片（包括当前）
-  if (column) {
-    column.querySelectorAll('.card--open').forEach(function(c) {
+  // 查找同一容器内的其他卡片并关闭（支持双列和交错两种布局）
+  var container = card.closest('.column') || card.closest('.interleaved-view');
+  if (container) {
+    container.querySelectorAll('.card--open').forEach(function(c) {
       c.classList.remove('card--open');
     });
   }
 
-  // 切换当前卡片（如果之前没打开就打开，否则保持关闭）
+  // 如果之前是关闭的，现在打开
   if (!wasOpen) {
     card.classList.add('card--open');
 
@@ -428,8 +428,10 @@ function toggleCard(envelope) {
         body.removeEventListener('transitionend', handler);
       }
     });
-  } else {
-    // 折叠时也重绘
+  }
+
+  // 如果是双列视图，重绘连线
+  if (container && container.classList.contains('column')) {
     setTimeout(drawConnections, 50);
   }
 }
