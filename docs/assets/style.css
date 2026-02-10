@@ -727,6 +727,12 @@ a:hover {
     gap: 1rem;
   }
 
+  /* 强制单列布局 */
+  .column--abyss,
+  .column--jade {
+    grid-column: 1 !important;
+  }
+
   .column-label {
     text-align: left;
     padding: 1.5rem 0 0.5rem;
