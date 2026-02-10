@@ -741,7 +741,6 @@ a:hover {
   /* 渊的卡片：右对齐，右边框 */
   .interleaved-view .card--abyss {
     margin-left: auto;
-    max-width: 82%;
     border-left: none;
     border-right: 3px solid var(--accent-abyss);
   }
@@ -760,7 +759,6 @@ a:hover {
   /* 霁的卡片：左对齐，左边框 */
   .interleaved-view .card--jade {
     margin-right: auto;
-    max-width: 82%;
     border-left: 3px solid var(--accent-jade);
     border-right: none;
   }
